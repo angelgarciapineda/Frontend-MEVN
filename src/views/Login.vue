@@ -47,17 +47,18 @@ export default {
   },
   methods: {
     signin() {
-      fetch("/signin", {
-        method: "POST",
-        body: JSON.stringify(this.seconnecter),
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json"
-        }
-      })
-        .then(res => res.json())
-        .then(data => console.log(data));
-      this.$router.push({ name: "Test" });
+      this.axios
+        .post("/signin", this.seconnecter)
+        .then(res => {
+          console.log(res.data);
+          const id = res.data.iduser;
+          //console.log(id);
+          //this.$router.push({ name: "App",params:{id} });
+          this.$router.push({ path: `/app/${id}` });
+        })
+        .catch(error => {
+          console.log(error.response);
+        });
     }
   }
 };

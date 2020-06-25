@@ -22,6 +22,7 @@
             class="form-control"
             id="exampleInputEmail1"
             aria-describedby="emailHelp"
+            placeholder="email@example.com"
           />
           <small
             id="emailHelp"
@@ -35,6 +36,7 @@
             v-model="sinscrire.password"
             class="form-control"
             id="exampleInputPassword1"
+            placeholder="Password"
           />
         </div>
         <button type="submit" class="btn btn-primary">S'inscrire</button>
@@ -61,20 +63,14 @@ export default {
   },
   methods: {
     signup() {
-      fetch("/api/signup", {
-        method: "POST",
-        body: JSON.stringify(this.sinscrire),
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json"
-        }
-      })
-        .then(res => res.json())
-        .then(data => {
-          this._user = data;
-          console.log(this._user);
+      this.axios
+        .post("/signup", this.sinscrire)
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(error => {
+          console.log(error.response);
         });
-      this.sinscrire = new Sinscrire();
       this.$router.push({ name: "Login" });
     }
   }
