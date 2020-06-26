@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-4">
       <h3>Créer un nouveau logement</h3>
-      <form @submit.prevent="saveHome">
+      <form @submit.prevent="saveHome" autocomplete="off" >
         <div class="form-group">
           <label for="_nom">Nom du logement</label>
           <input

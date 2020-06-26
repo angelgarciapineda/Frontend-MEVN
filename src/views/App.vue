@@ -6,6 +6,9 @@
           <b-tab title="Logement" active>
             <CreateHome/>
           </b-tab>
+          <b-tab title="Position du soleil">
+            <Sun/>
+          </b-tab>
           <b-tab title="Panneau">
             <b-card-text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis voluptate id est deleniti sint iste autem iure quas, quisquam dolorem pariatur, reiciendis, ut nam ratione magni dolore vitae fugiat modi.</b-card-text>
           </b-tab>
@@ -27,12 +30,14 @@
 <script>
 import CreateHome from '@/components/CreateHome.vue'
 import Weather from '@/components/Weather.vue'
+import Sun from '@/components/Sun.vue'
 
 export default {
   name: "User-home",
   components:{
     CreateHome,
-    Weather
+    Weather,
+    Sun
   },
   data() {
     return {
