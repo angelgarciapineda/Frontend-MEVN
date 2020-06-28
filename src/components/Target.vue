@@ -1,40 +1,34 @@
 <template>
   <div>
     <div class="row p-5">
-      <div class="col-md-8">
+      <div class="col-md-7">
         <b-card bg-variant="light">
-          <b-form @submit.prevent="saveHome">
+          <b-form @submit.prevent="addTarget">
+            <b-form-select v-model="selected">
+              <option v-for="home of homes" :key="home._id" :value="home">{{home.name}}</option>
+            </b-form-select>
+            <h2>Maison choisie:</h2>
+            <!-- {{selected._id}} -->
+            <p>Maison : {{selected.name}}</p>
+            <p>Rue : {{selected.street}}</p>
             <b-form-group
               label-cols-lg="3"
-              label="Créer un nouveau logement"
+              label="Créer un nouveau cible"
               label-size="lg"
               label-class="font-weight-bold pt-0"
               class="mb-0"
             >
               <b-form-group label-cols-sm="3" label="Nom:" label-align-sm="right">
-                <b-form-input v-model="home.name"></b-form-input>
-              </b-form-group>
-
-              <b-form-group label-cols-sm="3" label="Rue:" label-align-sm="right">
-                <b-form-input v-model="home.street"></b-form-input>
-              </b-form-group>
-
-              <b-form-group label-cols-sm="3" label="Code Postal:" label-align-sm="right">
-                <b-form-input v-model="home.postalcode"></b-form-input>
-              </b-form-group>
-
-              <b-form-group label-cols-sm="3" label="Ville:" label-align-sm="right">
-                <b-form-input v-model="home.city"></b-form-input>
+                <b-form-input v-model="target.name"></b-form-input>
               </b-form-group>
 
               <b-form-group label-cols-sm="3" label="Latitude:" label-align-sm="right">
-                <b-form-input v-model="home.latitude"></b-form-input>
+                <b-form-input v-model="target.latitude"></b-form-input>
               </b-form-group>
 
               <b-form-group label-cols-sm="3" label="Longitude:" label-align-sm="right">
-                <b-form-input v-model="home.longitude"></b-form-input>
+                <b-form-input v-model="target.longitude"></b-form-input>
               </b-form-group>
-
               <b-form-group>
                 <b-button type="submit" variant="dark" style="float:right">
                   <b-icon icon="search" aria-hidden="true"></b-icon>Enregistrer
@@ -45,27 +39,21 @@
         </b-card>
       </div>
     </div>
-    <!-- Table de logement -->
     <div class="p-5">
       <table class="table table-bordered">
         <thead>
           <tr>
             <th>Nom</th>
-            <th>Rue</th>
-            <th>Code Postal</th>
-            <th>Ville</th>
             <th>Latitude</th>
             <th>Longitude</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="home of homes" :key="home._id">
-            <td>{{home.name}}</td>
-            <td>{{home.street}}</td>
-            <td>{{home.postalcode}}</td>
-            <td>{{home.city}}</td>
-            <td>{{home.latitude}}</td>
-            <td>{{home.longitude}}</td>
+          <tr v-for="target of targets" :key="target._id">
+            <td>{{target.name}}</td>
+            <td>{{target.latitude}}</td>
+            <td>{{target.longitude}}</td>
             <td>
               <!-- <button class="btn btn-danger">Suprimer</button> -->
               <b-button type="submit" variant="danger">
@@ -84,23 +72,23 @@
 </template>
 
 <script>
-class Home {
-  constructor(name, street, postalcode, city, latitude, longitude) {
+class Target {
+  constructor(name, latitude, longitude) {
     this.name = name;
-    this.street = street;
-    this.postalcode = postalcode;
-    this.city = city;
     this.latitude = latitude;
     this.longitude = longitude;
   }
 }
 export default {
-  name: "CreateHome",
+  name: "Target",
   data() {
     return {
-      home: new Home(),
+      idUser: "",
+      selected: "",
       homes: [],
-      idUser: ""
+      targets: [],
+      selected: "",
+      target: new Target()
     };
   },
   created() {
@@ -108,20 +96,6 @@ export default {
     this.getHomes();
   },
   methods: {
-    saveHome() {
-      //console.log(this.$route.params.id);
-      console.log(this.idUser);
-      this.axios
-        .post(`/home/${this.idUser}`, this.home)
-        .then(res => {
-          /* console.log(res.data); */
-          this.getHomes();
-        })
-        .catch(error => {
-          console.log(error);
-        });
-      this.home = new Home();
-    },
     getHomes() {
       this.axios
         .get(`/home/${this.idUser}`)
@@ -131,7 +105,28 @@ export default {
           this.homes = res.data.user.homes;
         })
         .catch(error => {
-          console.log("Hay un error: ", error);
+          console.log("ERREUR : ", error);
+        });
+    },
+    addTarget() {
+      this.axios
+        .post(`/target/${this.selected._id}`, this.target)
+        .then(res => {
+          this.getTargets();
+        })
+        .catch(error => {
+          console.log("ERREUR : ", error);
+        });
+    },
+    getTargets() {
+      this.axios
+        .get(`/target/${this.selected._id}`)
+        .then(res => {
+          console.log(res.data);
+          this.targets = res.data.home.targets;
+        })
+        .catch(error => {
+          console.log("ERREUR : ", error);
         });
     }
   }

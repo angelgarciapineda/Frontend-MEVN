@@ -5,12 +5,12 @@
         <div class="col-md-6">
           <b-card bg-variant="light" style="height:100%">
             <b-form @submit.prevent="getPositionSun">
-              <b-form-group label="Latitude:" label-for="nested-latitude">
-                <b-form-input v-model="sun.latitude" id="nested-latitude"></b-form-input>
+              <b-form-group label="Latitude:" >
+                <b-form-input v-model="sun.latitude"></b-form-input>
               </b-form-group>
 
-              <b-form-group label="Longitude:" label-for="nested-longitude">
-                <b-form-input v-model="sun.longitude" id="nested-longitude"></b-form-input>
+              <b-form-group label="Longitude:">
+                <b-form-input v-model="sun.longitude"></b-form-input>
               </b-form-group>
               <b-form-group>
                 <b-calendar block v-model="sun.date" locale="fr-FR"></b-calendar>
@@ -31,25 +31,25 @@
         <div class="col-md-6">
           <b-card bg-variant="light" style="height:100%">
             <p class="h2 mb-2">
-              <b-icon icon="brightness-alt-high"></b-icon>Azimuth: {{azimuth}}°
+              <b-icon icon="brightness-alt-high"></b-icon> Azimuth: {{azimuth}}°
             </p>
             <p class="h2 mb-2">
-              <b-icon icon="house-fill"></b-icon>Hauteur: {{elevation}}°
+              <b-icon icon="house-fill"></b-icon> Hauteur: {{elevation}}°
             </p>
             <p class="h5 mb-2">
-              <b-icon icon="calendar-date"></b-icon>Date: {{sun.date}}
+              <b-icon icon="calendar-date"></b-icon> Date: {{sun.date}}
             </p>
             <p class="h5 mb-2">
-              <b-icon icon="clock"></b-icon>Heure: {{sun.time}}
+              <b-icon icon="clock"></b-icon> Heure: {{sun.time}}
             </p>
             <p class="h5 mb-2">
-              <b-icon icon="brightness-alt-low"></b-icon>Latitude: {{sun.latitude}}
+              <b-icon icon="brightness-alt-low"></b-icon> Latitude: {{sun.latitude}}
             </p>
             <p class="h5 mb-2">
-              <b-icon icon="brightness-alt-high-fill"></b-icon>Longitude: {{sun.longitude}}
+              <b-icon icon="brightness-alt-high-fill"></b-icon> Longitude: {{sun.longitude}}
             </p>
             <p class="h5 mb-2">
-              <b-icon icon="brightness-alt-high-fill"></b-icon>GMT {{sun.gmtdiff}}
+              <b-icon icon="brightness-alt-high-fill"></b-icon> GMT {{sun.gmtdiff}}
             </p>
           </b-card>
         </div>
