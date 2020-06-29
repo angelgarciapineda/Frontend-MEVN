@@ -59,7 +59,7 @@
               <td>{{home.longitude}}</td>
               <td>
                 <!-- <button class="btn btn-danger">Suprimer</button> -->
-                <b-button type="submit" variant="danger">
+                <b-button @click="deleteHome(home._id)" type="submit" variant="danger">
                   <b-icon icon="trash-fill" aria-hidden="true"></b-icon>
                 </b-button>
                 <b-button type="submit" variant="warning">
@@ -123,8 +123,17 @@ export default {
           this.homes = res.data.user.homes;
         })
         .catch(error => {
-          console.log("Hay un error: ", error);
+          console.log("Hay un error: ", error.response);
         });
+    },
+    deleteHome(id){
+      this.axios.delete(`/home/${id}`)
+      .then(res=>{
+        this.getHomes();
+      })
+      .catch(error=>{
+        console.log("ERREUR : ", error.response);
+      })
     }
   }
 };

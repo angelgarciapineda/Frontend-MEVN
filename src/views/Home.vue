@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-navbar toggleable type="dark" variant="dark">
+    <b-navbar toggleable type="dark" variant="dark" disable="true" >
       <b-navbar-brand :to="{name:'Home'}">Accueil</b-navbar-brand>
 
       <b-navbar-toggle target="navbar-toggle-collapse">

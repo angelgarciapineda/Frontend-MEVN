@@ -1,14 +1,10 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <!-- <router-link to="/">Home</router-link>| -->
-      <!--       <router-link to="/about">About</router-link>|
-      <router-link to="/signup">S'inscrire</router-link>|
-      <router-link to="/signin">Se connecter</router-link>-->
-    </div>
+    <!-- Le composant router-view représente un composant spécifique basé sur l'emplacement de l'application,
+    comme dicté par l'instance de routeur qui se trouve src/router/index.js -->
     <router-view />
   </div>
 </template>
 
-<style>
-</style>
+<script>
+</script>
