@@ -19,7 +19,7 @@
       </b-navbar>
     </div>
     <div class="container" style="max-width: 400px;">
-      <form @submit.prevent="signup" class="px-4 py-3">
+      <form @submit.prevent="signup" class="px-4 py-3" autocomplete="off">
         <div class="form-group">
           <label for="exampleInputNom">Nom</label>
           <input

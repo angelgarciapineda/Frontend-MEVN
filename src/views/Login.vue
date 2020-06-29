@@ -19,7 +19,7 @@
       </b-navbar>
     </div>
     <div class="container" style="max-width: 400px;">
-      <form class="px-4 py-3" @submit.prevent="signin">
+      <form class="px-4 py-3" @submit.prevent="signin" autocomplete="off">
         <div class="form-group">
           <label for="exampleDropdownFormEmail2">Email address</label>
           <input
@@ -72,7 +72,8 @@ export default {
           this.$router.push({ path: `/app/${id}` });
         })
         .catch(error => {
-          console.log(error.response);
+          console.log(error.response.data);
+          alert(error.response.data.msg)
         });
     }
   }

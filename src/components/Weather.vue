@@ -3,7 +3,7 @@
     <!-- Formulaire pour consulter la météo -->
     <div class="col-md-6">
       <b-card bg-variant="light" style="height:100%">
-        <b-form @submit.prevent="getMeteo">
+        <b-form @submit.prevent="getMeteo" autocomplete="off">
           <b-form-group
             label-cols-lg="3"
             label="Consulter la météo"

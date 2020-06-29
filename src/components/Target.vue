@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="row p-5">
-      <div class="col-md-7">
+      <div class="col-md-5">
         <b-card bg-variant="light">
-          <b-form @submit.prevent="addTarget">
+          <b-form @submit.prevent="addTarget" autocomplete="off">
             <b-form-select v-model="selected">
               <option v-for="home of homes" :key="home._id" :value="home">{{home.name}}</option>
             </b-form-select>
@@ -38,35 +38,35 @@
           </b-form>
         </b-card>
       </div>
-    </div>
-    <div class="p-5">
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>Nom</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="target of targets" :key="target._id">
-            <td>{{target.name}}</td>
-            <td>{{target.latitude}}</td>
-            <td>{{target.longitude}}</td>
-            <td>
-              <!-- <button class="btn btn-danger">Suprimer</button> -->
-              <b-button type="submit" variant="danger">
-                <b-icon icon="trash-fill" aria-hidden="true"></b-icon>
-              </b-button>
-              <b-button type="submit" variant="warning">
-                <b-icon icon="pencil-square" aria-hidden="true"></b-icon>
-              </b-button>
-              <!-- <button class="btn btn-secondary">Modifier</button> -->
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="col-md-7">
+        <table class="table table-hover table-dark">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Latitude</th>
+              <th>Longitude</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="target of targets" :key="target._id">
+              <td>{{target.name}}</td>
+              <td>{{target.latitude}}</td>
+              <td>{{target.longitude}}</td>
+              <td>
+                <!-- <button class="btn btn-danger">Suprimer</button> -->
+                <b-button type="submit" variant="danger">
+                  <b-icon icon="trash-fill" aria-hidden="true"></b-icon>
+                </b-button>
+                <b-button type="submit" variant="warning">
+                  <b-icon icon="pencil-square" aria-hidden="true"></b-icon>
+                </b-button>
+                <!-- <button class="btn btn-secondary">Modifier</button> -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
