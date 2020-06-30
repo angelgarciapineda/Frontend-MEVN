@@ -66,7 +66,6 @@
             </tbody>
           </table>
         </div>
-
       </div>
     </div>
   </div>
@@ -132,11 +131,6 @@ export default {
         .delete(`/panel/${id}`)
         .then(res => {
           this.getPanels();
-          /* Ou on peut utiliser splice pour eliminer dans le front */
-          /* const index = this.panels.findIndex(
-            item => item._id === res.data._id
-          );
-          this.notas.splice(index, 1); */
         })
         .catch(error => {
           console.log(error.response);
@@ -165,18 +159,6 @@ export default {
         .catch(error => {
           console.log(error.response);
         });
-      /*       fetch("/api/panel/" + id)
-        .then(res => res.json())
-        .then(data => {
-          this.panel = new Panel(
-            data["panel"].name,
-            data["panel"].azimut,
-            data["panel"].elevation,
-            data["panel"].description
-          );
-          this.panelToEdit = data["panel"]._id;
-          this.edit = true;
-        }); */
     }
   }
 };

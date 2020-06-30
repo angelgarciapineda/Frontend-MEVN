@@ -4,7 +4,7 @@
       <div class="col-md-4">
         <b-card bg-variant="light">
           <b-form @submit.prevent="saveHome" autocomplete="off">
-            <p class="h2">Créer un nouveau logement : </p>
+            <p class="h2">Créer un nouveau logement :</p>
             <b-form-group label-cols-sm="3" label="Nom:" label-align-sm="right">
               <b-form-input v-model="home.name"></b-form-input>
             </b-form-group>
@@ -29,10 +29,11 @@
               <b-form-input v-model="home.longitude"></b-form-input>
             </b-form-group>
 
-            <b-form-group>
-              <b-button type="submit" variant="dark" style="float:right">
-                <b-icon icon="search" aria-hidden="true"></b-icon>Enregistrer
-              </b-button>
+            <b-form-group v-if="edit===false">
+              <b-button type="submit" variant="dark" style="float:right">Enregistrer</b-button>
+            </b-form-group>
+            <b-form-group v-else>
+              <b-button type="submit" variant="dark" style="float:right">Modifier</b-button>
             </b-form-group>
           </b-form>
         </b-card>
@@ -47,6 +48,7 @@
               <th>Ville</th>
               <th>Latitude</th>
               <th>Longitude</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -62,7 +64,7 @@
                 <b-button @click="deleteHome(home._id)" type="submit" variant="danger">
                   <b-icon icon="trash-fill" aria-hidden="true"></b-icon>
                 </b-button>
-                <b-button type="submit" variant="warning">
+                <b-button @click="updateHome(home._id)" type="submit" variant="warning">
                   <b-icon icon="pencil-square" aria-hidden="true"></b-icon>
                 </b-button>
                 <!-- <button class="btn btn-secondary">Modifier</button> -->
@@ -92,7 +94,9 @@ export default {
     return {
       home: new Home(),
       homes: [],
-      idUser: ""
+      idUser: "",
+      edit: false,
+      panelToEdit: ""
     };
   },
   created() {
@@ -101,39 +105,71 @@ export default {
   },
   methods: {
     saveHome() {
-      //console.log(this.$route.params.id);
-      console.log(this.idUser);
-      this.axios
-        .post(`/home/${this.idUser}`, this.home)
-        .then(res => {
-          /* console.log(res.data); */
-          this.getHomes();
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      if (this.edit === false) {
+        this.axios
+          .post(`/home/${this.idUser}`, this.home)
+          .then(res => {
+            /* console.log(res.data); */
+            this.getHomes();
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      } else {
+        this.axios
+          .put(`/home/${this.homeToEdit}`, this.home)
+          .then(res => {
+            this.getHomes();
+          })
+          .catch(error => {
+            console.log(error.response);
+          });
+        this.edit = false;
+      }
+      /* pour effacer les données quand on charge la page */
       this.home = new Home();
     },
     getHomes() {
       this.axios
         .get(`/home/${this.idUser}`)
         .then(res => {
-          /* console.log(res.data);
-          console.log(res.data.user.homes); */
           this.homes = res.data.user.homes;
         })
         .catch(error => {
           console.log("Hay un error: ", error.response);
         });
     },
-    deleteHome(id){
-      this.axios.delete(`/home/${id}`)
-      .then(res=>{
-        this.getHomes();
-      })
-      .catch(error=>{
-        console.log("ERREUR : ", error.response);
-      })
+    deleteHome(id) {
+      this.axios
+        .delete(`/home/${id}/${this.idUser}`)
+        .then(res => {
+          console.log(res.data);
+          this.getHomes();
+        })
+        .catch(error => {
+          console.log("ERREUR : ", error.response);
+        });
+    },
+    updateHome(id) {
+      this.axios
+        .get(`/home/${id}/${this.idUser}`)
+        .then(res => {
+          console.log(res.data);
+          /* Cest pour remplir le formulaire */
+          this.home = new Home(
+            res.data["home"].name,
+            res.data["home"].street,
+            res.data["home"].postalcode,
+            res.data["home"].city,
+            res.data["home"].latitude,
+            res.data["home"].longitude
+          );
+          this.homeToEdit = res.data["home"]._id;
+          this.edit = true;
+        })
+        .catch(error => {
+          console.log(error.response);
+        });
     }
   }
 };
