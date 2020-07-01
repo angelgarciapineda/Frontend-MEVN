@@ -33,7 +33,7 @@
           <Target />
         </b-tab>
         <b-tab title="Plage horaire">
-          <b-card-text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum illum saepe obcaecati error accusantium a reiciendis nam dignissimos laborum magni ad, odio eum nulla quam similique, odit sapiente recusandae non?</b-card-text>
+          <TimeSlot />
         </b-tab>
         <b-tab title="Météo">
           <Weather />
@@ -49,6 +49,7 @@ import Weather from "@/components/Weather.vue";
 import Sun from "@/components/Sun.vue";
 import Panel from "@/components/Panel.vue";
 import Target from "@/components/Target.vue";
+import TimeSlot from "@/components/TimeSlot.vue";
 
 export default {
   name: "User-home",
@@ -57,7 +58,8 @@ export default {
     Weather,
     Sun,
     Panel,
-    Target
+    Target,
+    TimeSlot
   },
   data() {
     return {};
