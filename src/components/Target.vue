@@ -4,7 +4,7 @@
       <div class="col-md-5">
         <b-card bg-variant="light">
           <b-form @submit.prevent="addTarget" autocomplete="off">
-            <b-form-select v-model="selected">
+            <b-form-select v-model="selected" @change="getTargets">
               <option v-for="home of homes" :key="home._id" :value="home">{{home.name}}</option>
             </b-form-select>
             <h2>Maison choisie:</h2>
@@ -29,10 +29,11 @@
               <b-form-group label-cols-sm="3" label="Longitude:" label-align-sm="right">
                 <b-form-input v-model="target.longitude"></b-form-input>
               </b-form-group>
-              <b-form-group>
-                <b-button type="submit" variant="dark" style="float:right">
-                  <b-icon icon="search" aria-hidden="true"></b-icon>Enregistrer
-                </b-button>
+              <b-form-group v-if="edit===false">
+                <b-button type="submit" variant="dark" style="float:right">Enregistrer</b-button>
+              </b-form-group>
+              <b-form-group v-else>
+                <b-button type="submit" variant="dark" style="float:right">Modifier</b-button>
               </b-form-group>
             </b-form-group>
           </b-form>
@@ -55,10 +56,10 @@
               <td>{{target.longitude}}</td>
               <td>
                 <!-- <button class="btn btn-danger">Suprimer</button> -->
-                <b-button type="submit" variant="danger">
+                <b-button @click.prevent="deleteTarget(target._id)" type="submit" variant="danger">
                   <b-icon icon="trash-fill" aria-hidden="true"></b-icon>
                 </b-button>
-                <b-button type="submit" variant="warning">
+                <b-button @click.prevent="updateTarget(target._id)" type="submit" variant="warning">
                   <b-icon icon="pencil-square" aria-hidden="true"></b-icon>
                 </b-button>
                 <!-- <button class="btn btn-secondary">Modifier</button> -->
@@ -83,12 +84,13 @@ export default {
   name: "Target",
   data() {
     return {
-      idUser: "",
-      selected: "",
+      target: new Target(),
       homes: [],
       targets: [],
+      idUser: "",
       selected: "",
-      target: new Target()
+      edit: false,
+      targetToEdit: ""
     };
   },
   created() {
@@ -109,14 +111,28 @@ export default {
         });
     },
     addTarget() {
-      this.axios
-        .post(`/target/${this.selected._id}`, this.target)
-        .then(res => {
-          this.getTargets();
-        })
-        .catch(error => {
-          console.log("ERREUR : ", error);
-        });
+      if (this.edit === false) {
+        this.axios
+          .post(`/target/${this.selected._id}`, this.target)
+          .then(res => {
+            this.getTargets();
+          })
+          .catch(error => {
+            console.log("ERREUR : ", error);
+          });
+      } else {
+        this.axios
+          .put(`/target/${this.targetToEdit}`, this.target)
+          .then(res => {
+            this.getTargets();
+          })
+          .catch(error => {
+            console.log(error.response);
+          });
+        this.edit = false;
+      }
+      /* pour effacer les données quand on charge la page */
+      this.target = new Target();
     },
     getTargets() {
       this.axios
@@ -127,6 +143,35 @@ export default {
         })
         .catch(error => {
           console.log("ERREUR : ", error);
+        });
+    },
+    deleteTarget(id) {
+      this.axios
+        .delete(`/target/${id}/${this.selected._id}`)
+        .then(res => {
+          console.log(res.data);
+          this.getTargets();
+        })
+        .catch(error => {
+          console.log("ERREUR : ", error.response);
+        });
+    },
+    updateTarget(id) {
+      this.axios
+        .get(`/target/${id}/${this.selected._id}`)
+        .then(res => {
+          console.log(res.data);
+          /* Cest pour remplir le formulaire */
+          this.target = new Target(
+            res.data["target"].name,
+            res.data["target"].latitude,
+            res.data["target"].longitude
+          );
+          this.targetToEdit = res.data["target"]._id;
+          this.edit = true;
+        })
+        .catch(error => {
+          console.log(error.response);
         });
     }
   }

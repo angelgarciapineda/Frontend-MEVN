@@ -5,7 +5,7 @@
         <b-card bg-variant="light" style="height:100%">
           <b-form @submit.prevent="addTimeSlot" autocomplete="off">
             <p class="h2">Choissisez une maison :</p>
-            <b-form-select v-model="selected">
+            <b-form-select v-model="selected" @change="getPanels_Targets">
               <b-form-select-option
                 v-for="home of homes"
                 :key="home._id"
@@ -14,14 +14,6 @@
             </b-form-select>
             <p>Maison : {{selected.name}}</p>
             <p>Rue : {{selected.street}}</p>
-            <b-form-group>
-              <b-button
-                @click.prevent="getPanels_Targets"
-                type="submit"
-                variant="dark"
-                style="right"
-              >Chercher les pannneaux et cibles</b-button>
-            </b-form-group>
             <b-form-group label="Nom de la plage horaire:">
               <b-form-input v-model="timeslot.name"></b-form-input>
             </b-form-group>

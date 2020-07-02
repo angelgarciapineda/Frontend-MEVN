@@ -63,16 +63,13 @@
               <b-form @submit.prevent="getPanels" style="color:white">
                 <p class="h4 mb-2 pb-5">Envoyer les angles au panneau:</p>
                 <p>Choissisez une maison :</p>
-                <b-form-select v-model="selected">
+                <b-form-select v-model="selected" @change="getPanels">
                   <b-form-select-option
                     v-for="home of homes"
                     :key="home._id"
                     :value="home"
                   >{{home.name}}</b-form-select-option>
                 </b-form-select>
-                <b-form-group class="pt-5 pb-5">
-                  <b-button block type="submit" variant="light" style="right">Chercher les pannneaux</b-button>
-                </b-form-group>
               </b-form>
               <b-form style="color:white">
                 <p>Choissisez un panneau :</p>

@@ -3,7 +3,7 @@
     <div class="row pt-5">
       <div class="col-md-4">
         <b-card bg-variant="light">
-          <b-form @submit.prevent="saveHome" autocomplete="off">
+          <b-form @submit="saveHome" autocomplete="off">
             <p class="h2">Créer un nouveau logement :</p>
             <b-form-group label-cols-sm="3" label="Nom:" label-align-sm="right">
               <b-form-input v-model="home.name"></b-form-input>
@@ -96,7 +96,7 @@ export default {
       homes: [],
       idUser: "",
       edit: false,
-      panelToEdit: ""
+      homeToEdit: ""
     };
   },
   created() {
@@ -113,7 +113,7 @@ export default {
             this.getHomes();
           })
           .catch(error => {
-            console.log(error);
+            console.log(error.response);
           });
       } else {
         this.axios

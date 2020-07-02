@@ -5,7 +5,7 @@
         <b-card bg-variant="light">
           <b-form @submit.prevent="addPanel" autocomplete="off">
             <p class="h2">Choissisez une maison :</p>
-            <b-form-select v-model="selected">
+            <b-form-select v-model="selected" @change="getPanels">
               <b-form-select-option
                 v-for="home of homes"
                 :key="home._id"
@@ -35,10 +35,11 @@
             <b-form-group label-cols-sm="3" label="Longitude:" label-align-sm="right">
               <b-form-input v-model="panel.longitude"></b-form-input>
             </b-form-group>
-            <b-form-group>
-              <b-button type="submit" variant="dark" style="float:right">
-                <b-icon icon="search" aria-hidden="true"></b-icon>Enregistrer
-              </b-button>
+            <b-form-group v-if="edit===false">
+              <b-button type="submit" variant="dark" style="float:right">Enregistrer</b-button>
+            </b-form-group>
+            <b-form-group v-else>
+              <b-button type="submit" variant="dark" style="float:right">Modifier</b-button>
             </b-form-group>
           </b-form>
         </b-card>
@@ -64,10 +65,10 @@
               <td>{{panel.longitude}}</td>
               <td>
                 <!-- <button class="btn btn-danger">Suprimer</button> -->
-                <b-button type="submit" variant="danger">
+                <b-button @click.prevent="deletePanel(panel._id)" type="submit" variant="danger">
                   <b-icon icon="trash-fill" aria-hidden="true"></b-icon>
                 </b-button>
-                <b-button type="submit" variant="warning">
+                <b-button @click.prevent="updatePanel(panel._id)" type="submit" variant="warning">
                   <b-icon icon="pencil-square" aria-hidden="true"></b-icon>
                 </b-button>
                 <!-- <button class="btn btn-secondary">Modifier</button> -->
@@ -94,11 +95,13 @@ export default {
   name: "Panel",
   data() {
     return {
-      idUser: "",
-      homes: [],
+      panel: new Panel(),
       panels: [],
+      homes: [],
+      idUser: "",
       selected: "",
-      panel: new Panel()
+      edit: false,
+      panelToEdit: ""
     };
   },
   created() {
@@ -119,14 +122,28 @@ export default {
         });
     },
     addPanel() {
-      this.axios
-        .post(`/panel/${this.selected._id}`, this.panel)
-        .then(res => {
-          this.getPanels();
-        })
-        .catch(error => {
-          console.log("ERREUR : ", error);
-        });
+      if (this.edit === false) {
+        this.axios
+          .post(`/panel/${this.selected._id}`, this.panel)
+          .then(res => {
+            this.getPanels();
+          })
+          .catch(error => {
+            console.log("ERREUR : ", error);
+          });
+      } else {
+        this.axios
+          .put(`/panel/${this.panelToEdit}`, this.panel)
+          .then(res => {
+            this.getPanels();
+          })
+          .catch(error => {
+            console.log(error.response);
+          });
+        this.edit = false;
+      }
+      /* pour effacer les données quand on charge la page */
+      this.panel = new Panel();
     },
     getPanels() {
       this.axios
@@ -137,6 +154,37 @@ export default {
         })
         .catch(error => {
           console.log("ERREUR : ", error);
+        });
+    },
+    deletePanel(id) {
+      this.axios
+        .delete(`/panel/${id}/${this.selected._id}`)
+        .then(res => {
+          console.log(res.data);
+          this.getPanels();
+        })
+        .catch(error => {
+          console.log("ERREUR : ", error.response);
+        });
+    },
+    updatePanel(id) {
+      this.axios
+        .get(`/panel/${id}/${this.selected._id}`)
+        .then(res => {
+          console.log(res.data);
+          /* Cest pour remplir le formulaire */
+          this.panel = new Panel(
+            res.data["panel"].name,
+            res.data["panel"].azimuth,
+            res.data["panel"].elevation,
+            res.data["panel"].latitude,
+            res.data["panel"].longitude
+          );
+          this.panelToEdit = res.data["panel"]._id;
+          this.edit = true;
+        })
+        .catch(error => {
+          console.log(error.response);
         });
     }
   }
