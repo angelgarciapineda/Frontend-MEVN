@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row pt-5">
     <!-- Formulaire pour consulter la météo -->
     <div class="col-md-6">
       <b-card bg-variant="light" style="height:100%">

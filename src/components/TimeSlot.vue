@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <div class="row">
+  <div>
+    <div class="row pt-5">
       <div class="col-md-7">
         <b-card bg-variant="light" style="height:100%">
           <b-form @submit.prevent="addTimeSlot" autocomplete="off">
@@ -24,12 +24,12 @@
                 </b-form-group>
               </div>
               <div class="col-md-3">
-                <b-form-group label="Heure de fin:">
+                <b-form-group label="Date de fin:">
                   <b-form-input v-model="timeslot.enddate" type="date"></b-form-input>
                 </b-form-group>
               </div>
               <div class="col-md-3">
-                <b-form-group label="Date de fin:">
+                <b-form-group label="Heure de début:">
                   <b-form-input v-model="timeslot.starttime" type="time"></b-form-input>
                 </b-form-group>
               </div>

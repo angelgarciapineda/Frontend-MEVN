@@ -1,14 +1,13 @@
 <template>
   <div>
-    <div class="row p-5">
+    <div class="row pt-5">
       <div class="col-md-5">
         <b-card bg-variant="light">
           <b-form @submit.prevent="addTarget" autocomplete="off">
+            <p class="h2">Choissisez une maison :</p>
             <b-form-select v-model="selected" @change="getTargets">
               <option v-for="home of homes" :key="home._id" :value="home">{{home.name}}</option>
             </b-form-select>
-            <h2>Maison choisie:</h2>
-            <!-- {{selected._id}} -->
             <p>Maison : {{selected.name}}</p>
             <p>Rue : {{selected.street}}</p>
             <b-form-group

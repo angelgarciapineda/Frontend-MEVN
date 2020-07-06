@@ -15,7 +15,14 @@
             </b-form-select>
             <p>Maison : {{selected.name}}</p>
             <p>Rue : {{selected.street}}</p>
-            <p></p>
+            <b-form-group>
+              <b-button
+                block
+                @click.prevent="getLocation"
+                type="submit"
+                variant="dark"
+              >Obtenir mes coordonnées</b-button>
+            </b-form-group>
             <b-form-group label-cols-sm="3" label="Nom:" label-align-sm="right">
               <b-form-input v-model="panel.name"></b-form-input>
             </b-form-group>
@@ -113,8 +120,6 @@ export default {
       this.axios
         .get(`/home/${this.idUser}`)
         .then(res => {
-          /* console.log(res.data);
-          console.log(res.data.user.homes); */
           this.homes = res.data.user.homes;
         })
         .catch(error => {
@@ -186,6 +191,21 @@ export default {
         .catch(error => {
           console.log(error.response);
         });
+    },
+    success(pos) {
+      let crd = pos.coords;
+      this.panel.latitude = crd.latitude;
+      this.panel.longitude = crd.longitude;
+    },
+    error(err) {
+      console.warn("ERROR(" + err.code + "): " + err.message);
+    },
+    getLocation() {
+      navigator.geolocation.getCurrentPosition(
+        this.success,
+        this.error,
+        this.options
+      );
     }
   }
 };
