@@ -28,7 +28,7 @@
             >
               <b-form-input id="nested-longitude" v-model="meteo._longitude"></b-form-input>
             </b-form-group>
-
+            <p style="color:red">{{message}}</p>
             <b-form-group>
               <b-button type="submit" variant="dark" style="float:right">
                 <b-icon icon="search" aria-hidden="true"></b-icon>Consulter
@@ -89,34 +89,42 @@ export default {
         _temperatureMin: "",
         _temperatureMax: "",
         _description: ""
-      }
+      },
+      message: ""
     };
   },
   created() {},
   methods: {
     getMeteo() {
-      const apiKey = "0983694babdaf2a6579ab01bd868bca0";
-      this.axios
-        .get(
-          `https://api.openweathermap.org/data/2.5/weather?lat=${this.meteo._latitude}&lon=${this.meteo._longitude}&appid=${apiKey}`
-        )
-        .then(res => {
-          console.log(res.data);
-          this.meteo._city = res.data.name;
-          this.meteo._humidity = res.data.main.humidity;
-          this.meteo._pressure = res.data.main.pressure;
-          this.meteo._temperature = (res.data.main.temp - 273.15).toFixed();
-          this.meteo._temperatureMin = (
-            res.data.main.temp_min - 273.15
-          ).toFixed();
-          this.meteo._temperatureMax = (
-            res.data.main.temp_max - 273.15
-          ).toFixed();
-          this.meteo._description = res.data.weather[0].description;
-        })
-        .catch(error => {
-          console.log("ERROR : ", error);
-        });
+      if (
+        this.meteo._latitude.replace(/\s/g, "") == "" ||
+        this.meteo._longitude.replace(/\s/g, "") == ""
+      ) {
+        this.message = "Il faut remplir tous les champs";
+      } else {
+        const apiKey = "0983694babdaf2a6579ab01bd868bca0";
+        this.axios
+          .get(
+            `https://api.openweathermap.org/data/2.5/weather?lat=${this.meteo._latitude}&lon=${this.meteo._longitude}&appid=${apiKey}`
+          )
+          .then(res => {
+            console.log(res.data);
+            this.meteo._city = res.data.name;
+            this.meteo._humidity = res.data.main.humidity;
+            this.meteo._pressure = res.data.main.pressure;
+            this.meteo._temperature = (res.data.main.temp - 273.15).toFixed();
+            this.meteo._temperatureMin = (
+              res.data.main.temp_min - 273.15
+            ).toFixed();
+            this.meteo._temperatureMax = (
+              res.data.main.temp_max - 273.15
+            ).toFixed();
+            this.meteo._description = res.data.weather[0].description;
+          })
+          .catch(error => {
+            console.log("ERROR : ", error.response);
+          });
+      }
     }
   }
 };

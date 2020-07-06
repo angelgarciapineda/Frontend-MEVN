@@ -42,6 +42,7 @@
             <b-form-group label-cols-sm="3" label="Longitude:" label-align-sm="right">
               <b-form-input v-model="panel.longitude"></b-form-input>
             </b-form-group>
+            <p style="color:red">{{message}}</p>
             <b-form-group v-if="edit===false">
               <b-button type="submit" variant="dark" style="float:right">Enregistrer</b-button>
             </b-form-group>
@@ -108,7 +109,8 @@ export default {
       idUser: "",
       selected: "",
       edit: false,
-      panelToEdit: ""
+      panelToEdit: "",
+      message: ""
     };
   },
   created() {
@@ -123,7 +125,7 @@ export default {
           this.homes = res.data.user.homes;
         })
         .catch(error => {
-          console.log("Hay un error: ", error);
+          console.log("ERREUR: ", error);
         });
     },
     addPanel() {
@@ -132,18 +134,22 @@ export default {
           .post(`/panel/${this.selected._id}`, this.panel)
           .then(res => {
             this.getPanels();
+            this.message = res.data.message;
           })
           .catch(error => {
             console.log("ERREUR : ", error);
+            this.message = error.response.data.message;
           });
       } else {
         this.axios
           .put(`/panel/${this.panelToEdit}`, this.panel)
           .then(res => {
             this.getPanels();
+            this.message = res.data.message;
           })
           .catch(error => {
             console.log(error.response);
+            this.message = error.response.data.message;
           });
         this.edit = false;
       }
@@ -165,7 +171,6 @@ export default {
       this.axios
         .delete(`/panel/${id}/${this.selected._id}`)
         .then(res => {
-          console.log(res.data);
           this.getPanels();
         })
         .catch(error => {
@@ -194,8 +199,8 @@ export default {
     },
     success(pos) {
       let crd = pos.coords;
-      this.panel.latitude = crd.latitude;
-      this.panel.longitude = crd.longitude;
+      this.panel.latitude = crd.latitude.toFixed(4);
+      this.panel.longitude = crd.longitude.toFixed(4);
     },
     error(err) {
       console.warn("ERROR(" + err.code + "): " + err.message);

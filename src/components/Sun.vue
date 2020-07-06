@@ -218,8 +218,8 @@ export default {
     },
     success(pos) {
       let crd = pos.coords;
-      this.sun.latitude = crd.latitude;
-      this.sun.longitude = crd.longitude;
+      this.sun.latitude = crd.latitude.toFixed(4);
+      this.sun.longitude = crd.longitude.toFixed(4);
     },
     error(err) {
       console.warn("ERROR(" + err.code + "): " + err.message);

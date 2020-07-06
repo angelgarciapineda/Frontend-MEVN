@@ -28,6 +28,7 @@
               <b-form-group label-cols-sm="3" label="Longitude:" label-align-sm="right">
                 <b-form-input v-model="target.longitude"></b-form-input>
               </b-form-group>
+              <p style="color:red">{{message}}</p>
               <b-form-group v-if="edit===false">
                 <b-button type="submit" variant="dark" style="float:right">Enregistrer</b-button>
               </b-form-group>
@@ -89,7 +90,8 @@ export default {
       idUser: "",
       selected: "",
       edit: false,
-      targetToEdit: ""
+      targetToEdit: "",
+      message: ""
     };
   },
   created() {
@@ -115,18 +117,22 @@ export default {
           .post(`/target/${this.selected._id}`, this.target)
           .then(res => {
             this.getTargets();
+            this.message = res.data.message;
           })
           .catch(error => {
             console.log("ERREUR : ", error);
+            this.message = error.response.data.message;
           });
       } else {
         this.axios
           .put(`/target/${this.targetToEdit}`, this.target)
           .then(res => {
             this.getTargets();
+            this.message = res.data.message;
           })
           .catch(error => {
             console.log(error.response);
+            this.message = error.response.data.message;
           });
         this.edit = false;
       }

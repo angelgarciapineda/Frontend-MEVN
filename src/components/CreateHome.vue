@@ -189,13 +189,8 @@ export default {
     },
     success(pos) {
       let crd = pos.coords;
-
-      /* console.log("Your current position is:");
-      console.log("Latitude : " + crd.latitude);
-      console.log("Longitude: " + crd.longitude);
-      console.log("More or less " + crd.accuracy + " meters."); */
-      this.lat = crd.latitude;
-      this.lon = crd.longitude;
+      this.lat = crd.latitude.toFixed(4);
+      this.lon = crd.longitude.toFixed(4);
     },
     error(err) {
       console.warn("ERROR(" + err.code + "): " + err.message);
