@@ -40,6 +40,7 @@
             placeholder="Password"
           />
         </div>
+        <p style="color:red">{{message}}</p>
         <button type="submit" class="btn btn-primary">Sign in</button>
       </form>
     </div>
@@ -57,7 +58,8 @@ export default {
   name: "Login",
   data() {
     return {
-      seconnecter: new Seconnecter()
+      seconnecter: new Seconnecter(),
+      message: ""
     };
   },
   methods: {
@@ -65,15 +67,11 @@ export default {
       this.axios
         .post("/signin", this.seconnecter)
         .then(res => {
-          console.log(res.data);
           const id = res.data.iduser;
-          //console.log(id);
-          //this.$router.push({ name: "App",params:{id} });
           this.$router.push({ path: `/app/${id}` });
         })
         .catch(error => {
-          console.log(error.response.data);
-          alert(error.response.data.msg)
+          this.message = error.response.data.message;
         });
     }
   }

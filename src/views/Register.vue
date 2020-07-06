@@ -54,6 +54,7 @@
             placeholder="Password"
           />
         </div>
+        <p style="color:red">{{message}}</p>
         <button type="submit" class="btn btn-primary">S'inscrire</button>
       </form>
     </div>
@@ -73,7 +74,8 @@ export default {
   data() {
     return {
       sinscrire: new Sinscrire(),
-      _user: ""
+      _user: "",
+      message: ""
     };
   },
   methods: {
@@ -82,11 +84,11 @@ export default {
         .post("/signup", this.sinscrire)
         .then(res => {
           console.log(res.data);
+          this.$router.push({ name: "Login" });
         })
         .catch(error => {
-          console.log(error.response);
+          this.message = error.response.data.message;
         });
-      this.$router.push({ name: "Login" });
     }
   }
 };

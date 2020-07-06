@@ -5,6 +5,13 @@
         <div class="col-md-6">
           <b-card bg-variant="light" style="height:100%">
             <b-form @submit.prevent="getPositionSun" autocomplete="off">
+              <b-form-group>
+                <b-button
+                  @click.prevent="getLocation"
+                  type="submit"
+                  variant="dark"
+                >Obtenir mes coordonnées</b-button>
+              </b-form-group>
               <b-form-group label="Latitude:">
                 <b-form-input v-model="sun.latitude"></b-form-input>
               </b-form-group>
@@ -81,7 +88,13 @@
                   >{{panel.name}}</b-form-select-option>
                 </b-form-select>
                 <b-form-group class="pt-5 pb-5">
-                  <b-button block type="submit" variant="light" style="right">Envoyer les angles</b-button>
+                  <b-button
+                    @click.prevent="updatePanelAttributes"
+                    block
+                    type="submit"
+                    variant="light"
+                    style="right"
+                  >Envoyer les angles</b-button>
                 </b-form-group>
                 <b-form-group>
                   <p>Maison: {{selected.name}}</p>
@@ -162,6 +175,31 @@ export default {
         .catch(error => {
           console.log("ERREUR : ", error);
         });
+    },
+    updatePanelAttributes() {
+      this.axios
+        .put(`/panel/${this.selectedPanel._id}/${this.selected._id}`)
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => {
+          console.log("ERREUR au modifier : ", err.response);
+        });
+    },
+    success(pos) {
+      let crd = pos.coords;
+      this.sun.latitude = crd.latitude;
+      this.sun.longitude = crd.longitude;
+    },
+    error(err) {
+      console.warn("ERROR(" + err.code + "): " + err.message);
+    },
+    getLocation() {
+      navigator.geolocation.getCurrentPosition(
+        this.success,
+        this.error,
+        this.options
+      );
     }
   }
 };

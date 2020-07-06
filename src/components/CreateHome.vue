@@ -39,6 +39,16 @@
         </b-card>
       </div>
       <div class="col-md-8">
+        <p class="h5">Si vous ne connaissez pas votre latitude et longitude consultez-les ici :</p>
+        <b-form-group>
+          <b-button
+            @click.prevent="getLocation"
+            type="submit"
+            variant="dark"
+          >Obtenir mes coordonnées</b-button>
+        </b-form-group>
+        <p>Latitude actuelle: {{lat}}</p>
+        <p>Longitude actuelle:{{lon}}</p>
         <table class="table table-hover table-dark">
           <thead>
             <tr>
@@ -67,7 +77,6 @@
                 <b-button @click="updateHome(home._id)" type="submit" variant="warning">
                   <b-icon icon="pencil-square" aria-hidden="true"></b-icon>
                 </b-button>
-                <!-- <button class="btn btn-secondary">Modifier</button> -->
               </td>
             </tr>
           </tbody>
@@ -96,7 +105,14 @@ export default {
       homes: [],
       idUser: "",
       edit: false,
-      homeToEdit: ""
+      homeToEdit: "",
+      options: {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      },
+      lat: "",
+      lon: ""
     };
   },
   created() {
@@ -170,6 +186,26 @@ export default {
         .catch(error => {
           console.log(error.response);
         });
+    },
+    success(pos) {
+      let crd = pos.coords;
+
+      /* console.log("Your current position is:");
+      console.log("Latitude : " + crd.latitude);
+      console.log("Longitude: " + crd.longitude);
+      console.log("More or less " + crd.accuracy + " meters."); */
+      this.lat = crd.latitude;
+      this.lon = crd.longitude;
+    },
+    error(err) {
+      console.warn("ERROR(" + err.code + "): " + err.message);
+    },
+    getLocation() {
+      navigator.geolocation.getCurrentPosition(
+        this.success,
+        this.error,
+        this.options
+      );
     }
   }
 };
